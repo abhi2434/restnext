@@ -11,12 +11,22 @@ export default function handler(req, res) {
 
   if(req.method == "GET"){ 
     if(id != null){
-      res.status(200).json({ 
-        ...products.find(prod => prod.id === parseInt(id)),
-      });
+      var prod =products.find(prod => prod.id === parseInt(id));
+      if(prod == null){
+        res.status(400).json({ error: 'Not found' });
+      } 
+      else{
+        res.status(200).json({ 
+          ...prod,
+        });
+      }
     }
     else{
       res.status(200).json({products })
     }
+  }
+  else if(req.method == "POST"){
+    var body = req.body;
+    return res.status(200).json({ body });
   }
 }
