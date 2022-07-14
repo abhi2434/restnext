@@ -7,11 +7,16 @@ const products= require("../../products.json")
 
 export default function handler(req, res) {
   
-  const { query: { id } } = req;
-
+  const { query: { id, name } } = req;
+  var filter = null;
+  if(id != null)
+    filter = prod => prod.id === parseInt(id);
+  else if(name != null)
+    filter = prod => prod.title.indexOf(name) >= 0;
+  
   if(req.method == "GET"){ 
-    if(id != null){
-      var prod =products.find(prod => prod.id === parseInt(id));
+    if(filter != null){
+      var prod =products.find(filter);
       if(prod == null){
         res.status(400).json({ error: 'Not found' });
       } 
